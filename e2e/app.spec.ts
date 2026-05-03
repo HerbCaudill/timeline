@@ -1,6 +1,8 @@
-import { test, expect } from "@playwright/test"
+import { expect, test } from "@playwright/test"
 
-test("displays hello message", async ({ page }) => {
+test("displays timeline date controls", async ({ page }) => {
   await page.goto("/")
-  await expect(page.getByRole("heading", { name: /Hello,/ })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Previous day" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Next day" })).toBeVisible()
+  await expect(page.getByText("2026-02-25")).toBeVisible()
 })
