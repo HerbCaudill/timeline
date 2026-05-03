@@ -15,10 +15,17 @@ export function LocationTrackLayer({ locations, samplePointZoomThreshold = 15 }:
 
   return (
     <>
-      <Polyline positions={locations.map(location => [location.latitude, location.longitude])} />
+      <Polyline
+        positions={locations.map(location => [location.latitude, location.longitude])}
+        pathOptions={{ className: "location-track-line" }}
+      />
       {locations.length === 0 ? null : (
         <>
-          <CircleMarker center={[locations[0].latitude, locations[0].longitude]} radius={8}>
+          <CircleMarker
+            center={[locations[0].latitude, locations[0].longitude]}
+            radius={8}
+            pathOptions={{ className: "location-track-start" }}
+          >
             <Popup>
               <div>Start</div>
               <div>{locations[0].timestamp}</div>
@@ -30,6 +37,7 @@ export function LocationTrackLayer({ locations, samplePointZoomThreshold = 15 }:
               locations[locations.length - 1].longitude,
             ]}
             radius={8}
+            pathOptions={{ className: "location-track-end" }}
           >
             <Popup>
               <div>End</div>
@@ -45,6 +53,7 @@ export function LocationTrackLayer({ locations, samplePointZoomThreshold = 15 }:
               key={`${location.timestamp}-${location.latitude}-${location.longitude}`}
               center={[location.latitude, location.longitude]}
               radius={5}
+              pathOptions={{ className: "location-track-point" }}
             >
               <Popup>{location.timestamp}</Popup>
             </CircleMarker>
