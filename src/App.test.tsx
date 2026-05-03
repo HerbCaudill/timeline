@@ -1,5 +1,19 @@
 import { fireEvent, render, screen } from "@testing-library/react"
+import type { ReactNode } from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+
+vi.mock("./components/LocationMapShell", () => {
+  return {
+    LocationMapShell: ({ footer }: { footer: ReactNode }) => {
+      return (
+        <div role="region" aria-label="Location map">
+          {footer}
+        </div>
+      )
+    },
+  }
+})
+
 import { App } from "./App"
 
 describe("App", () => {
@@ -22,10 +36,11 @@ describe("App", () => {
     vi.unstubAllGlobals()
   })
 
-  it("renders date scrubber controls for the continuous timeline range", async () => {
+  it("renders the map shell with date scrubber controls for the continuous timeline range", async () => {
     render(<App />)
 
-    expect(await screen.findByText("2024-01-01")).toBeInTheDocument()
+    expect(await screen.findByRole("region", { name: "Location map" })).toBeInTheDocument()
+    expect(screen.getByText("2024-01-01")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Previous day" })).toBeDisabled()
 
     fireEvent.click(screen.getByRole("button", { name: "Next day" }))
