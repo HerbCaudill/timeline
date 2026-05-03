@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { LocationMapShell } from "./components/LocationMapShell"
+import { LocationMapViewport } from "./components/LocationMapViewport"
 import { LocationTrackLayer } from "./components/LocationTrackLayer"
 import { TimelineDateScrubber } from "./components/TimelineDateScrubber"
 import { getEffectiveLocationsForDay } from "./data/location/getEffectiveLocationsForDay"
@@ -24,9 +25,11 @@ export function App({}: Props) {
       }
 
       const nextDates = getLocationDatesInRange(dateRange)
+      const defaultDate = nextDates[nextDates.length - 1] ?? null
+
       setDates(nextDates)
       setLocations(nextLocations)
-      setSelectedDate(nextDates[0] ?? null)
+      setSelectedDate(defaultDate)
       setMapCenter([nextLocations[0].latitude, nextLocations[0].longitude])
     })
   }, [])
@@ -34,6 +37,8 @@ export function App({}: Props) {
   if (selectedDate === null || mapCenter === null) {
     return <div className="min-h-screen bg-slate-100" />
   }
+
+  const effectiveLocations = getEffectiveLocationsForDay(locations, selectedDate)
 
   return (
     <LocationMapShell
@@ -46,7 +51,8 @@ export function App({}: Props) {
         />
       }
     >
-      <LocationTrackLayer locations={getEffectiveLocationsForDay(locations, selectedDate)} />
+      <LocationMapViewport locations={effectiveLocations} />
+      <LocationTrackLayer locations={effectiveLocations} />
     </LocationMapShell>
   )
 }

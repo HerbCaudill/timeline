@@ -23,6 +23,14 @@ vi.mock("./components/LocationTrackLayer", () => {
   }
 })
 
+vi.mock("./components/LocationMapViewport", () => {
+  return {
+    LocationMapViewport: () => {
+      return <div>Viewport</div>
+    },
+  }
+})
+
 import { App } from "./App"
 
 describe("App", () => {
@@ -45,14 +53,14 @@ describe("App", () => {
     vi.unstubAllGlobals()
   })
 
-  it("renders the map shell with date scrubber controls for the continuous timeline range", async () => {
+  it("starts on the most recent day and supports stepping backward through the continuous range", async () => {
     render(<App />)
 
     expect(await screen.findByRole("region", { name: "Location map" })).toBeInTheDocument()
-    expect(screen.getByText("2024-01-01")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Previous day" })).toBeDisabled()
+    expect(screen.getByText("2024-01-03")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Next day" })).toBeDisabled()
 
-    fireEvent.click(screen.getByRole("button", { name: "Next day" }))
+    fireEvent.click(screen.getByRole("button", { name: "Previous day" }))
 
     expect(screen.getByText("2024-01-02")).toBeInTheDocument()
   })
@@ -60,12 +68,14 @@ describe("App", () => {
   it("renders the selected day's effective track inside the map shell", async () => {
     render(<App />)
 
-    expect(await screen.findByText("Track: 2024-01-01T08:00:00")).toBeInTheDocument()
+    expect(
+      await screen.findByText("Track: 2024-01-01T08:00:00, 2024-01-03T10:00:00"),
+    ).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("button", { name: "Next day" }))
+    fireEvent.click(screen.getByRole("button", { name: "Previous day" }))
     expect(screen.getByText("Track: 2024-01-01T08:00:00")).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("button", { name: "Next day" }))
-    expect(screen.getByText("Track: 2024-01-01T08:00:00, 2024-01-03T10:00:00")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Previous day" }))
+    expect(screen.getByText("Track: 2024-01-01T08:00:00")).toBeInTheDocument()
   })
 })
