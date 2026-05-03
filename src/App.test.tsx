@@ -4,12 +4,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("./components/LocationMapShell", () => {
   return {
-    LocationMapShell: ({ footer }: { footer: ReactNode }) => {
+    LocationMapShell: ({ children, footer }: { children?: ReactNode; footer: ReactNode }) => {
       return (
         <div role="region" aria-label="Location map">
+          <div>{children}</div>
           {footer}
         </div>
       )
+    },
+  }
+})
+
+vi.mock("./components/LocationTrackLayer", () => {
+  return {
+    LocationTrackLayer: ({ locations }: { locations: Array<{ timestamp: string }> }) => {
+      return <div>Track: {locations.map(location => location.timestamp).join(", ")}</div>
     },
   }
 })
@@ -46,5 +55,17 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("button", { name: "Next day" }))
 
     expect(screen.getByText("2024-01-02")).toBeInTheDocument()
+  })
+
+  it("renders the selected day's effective track inside the map shell", async () => {
+    render(<App />)
+
+    expect(await screen.findByText("Track: 2024-01-01T08:00:00")).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole("button", { name: "Next day" }))
+    expect(screen.getByText("Track: 2024-01-01T08:00:00")).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole("button", { name: "Next day" }))
+    expect(screen.getByText("Track: 2024-01-01T08:00:00, 2024-01-03T10:00:00")).toBeInTheDocument()
   })
 })
