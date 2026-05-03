@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest"
-import { parseBacktrackCsv } from "../parseBacktrackCsv"
+import { parseLocationCsv } from "../parseLocationCsv"
 
-describe("parseBacktrackCsv", () => {
-  it("parses backtrack csv rows into location entries", () => {
+describe("parseLocationCsv", () => {
+  it("parses location csv rows into location entries", () => {
     const csv = [
       "DateTime,Latitude,Longitude,Device",
       "2026-02-25 11:28:17,41.919851,3.207774,iPhone",
       "2026-02-26 15:58:18,41.919871,3.207733,iPad",
     ].join("\n")
 
-    expect(parseBacktrackCsv(csv)).toEqual([
+    expect(parseLocationCsv(csv)).toEqual([
       {
         date: "2026-02-25",
         device: "iPhone",

@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest"
-import { loadBacktrackLocations } from "../loadBacktrackLocations"
+import { loadLocations } from "../loadLocations"
 
-describe("loadBacktrackLocations", () => {
-  it("loads and parses the backtrack csv file into memory", async () => {
+describe("loadLocations", () => {
+  it("loads and parses the location csv file into memory", async () => {
     const csv = [
       "DateTime,Latitude,Longitude,Device",
       "2026-02-25 11:28:17,41.919851,3.207774,iPhone",
     ].join("\n")
 
-    const locations = await loadBacktrackLocations(async () => {
+    const locations = await loadLocations(async () => {
       return new Response(csv)
     })
 

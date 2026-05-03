@@ -1,4 +1,4 @@
-/** A single location sample from the backtrack export. */
+/** A single location sample from the location export. */
 export type LocationEntry = {
   /** The calendar day in local yyyy-mm-dd format. */
   date: string

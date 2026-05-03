@@ -1,7 +1,7 @@
 import type { LocationEntry } from "./types"
 
-/** Parse the backtrack CSV export into location entries. */
-export function parseBacktrackCsv(
+/** Parse the location CSV export into location entries. */
+export function parseLocationCsv(
   /** The raw CSV file contents. */
   csv: string,
 ): LocationEntry[] {
