@@ -24,6 +24,14 @@ export type BoundingBox = {
   maxLongitude: number
 }
 
+/** An inclusive date range spanning the location dataset. */
+export type LocationDateRange = {
+  /** The first calendar day in the dataset. */
+  startDate: string
+  /** The last calendar day in the dataset. */
+  endDate: string
+}
+
 /** A fetch-compatible function for loading location data. */
 export type FetchLocationData = (
   /** The path to the CSV file. */
