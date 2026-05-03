@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "timeline",
+  "project_id": "e2480db2-4ae6-4b43-921d-7b978670cf19"
+}
